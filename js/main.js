@@ -1,3 +1,5 @@
+var gmarkers = [];
+
 class Point{
     constructor(lat, lng){
         this.lat = lat;
@@ -13,17 +15,23 @@ class Point{
             icon: ''
         });
 
+        gmarkers.push(marker);
+
         let infoWindow = new google.maps.InfoWindow({
-            content: `<h1>${this.lat}</h1><br><h3>${this.lat}</h3><br><h5>${this.lat}</h5>`
+            content: `<h1>${this.lat}</h1><br><h3>${this.lat}</h3><br><h5>${this.lat}</h5>`,
+            disableAutoPan: false
         });
 
+
         marker.addListener('click', ()=>{
-            infoWindow.close(map, marker);
+            // for( let i = 0; i < gmarkers.length; i++){
+            //     gmarkers[i].setMap(null);
+            // }
+
             infoWindow.open(map, marker);
             console.log("marker created");
         });
 
-        
     
     }
 
@@ -34,6 +42,7 @@ class Point{
 
 }
 
+//Creates a google maps api script
 function mapScript(){
     let gmap = document.createElement('script');
     const API_KEY = "AIzaSyCbi55z8XJ33DfKeJvxI3ccEru05EhofEw";
@@ -42,7 +51,6 @@ function mapScript(){
     gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&signed_in=true&key=${API_KEY}&language=en`;
     document.body.appendChild(gmap);
 }
-
 
 function initMap(){
     let defMapCenter = {
@@ -58,6 +66,23 @@ function initMap(){
         let point = new Point(i , i+10);
     }
 }
+
+
+fetch("http://cors.io/spreadsheets.google.com/feeds/list/0AtMEoZDi5-pedElCS1lrVnp0Yk1vbFdPaUlOc3F3a2c/od6/public/values?alt=json").then( response => {
+        return response.json();
+    }).then( data => { 
+        console.log(data);
+    });
+
+    
+
+
+
+
+
+
+
+
 
 // function codeAddress(address) {
 //     geocoder.geocode({ 'address': address }, function(results, status) {
