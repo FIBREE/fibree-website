@@ -1,4 +1,5 @@
 var gmarkers = [];
+//dummy data for testing
 var list = [
     {
         "id": "1",
@@ -7,7 +8,9 @@ var list = [
         "title": "Alpha Tau Omega Fraternity",
         "description": "<p>Alpha Tau Omega house</p>",
         "longitude": "-87.321133",
-        "latitude": "39.484092"
+        "latitude": "39.484092",
+        "status": "ongoing",
+        "address": "Belgrade, Serbia"
       }, {
         "id": "2",
         "category": "6",
@@ -15,7 +18,9 @@ var list = [
         "title": "Apartment Commons",
         "description": "<p>The commons area of the apartment-style residential complex</p>",
         "longitude": "20.329282",
-        "latitude": "39.483599"
+        "latitude": "39.483599",
+        "status": "ongoing",
+        "address": "Paris, France"
       }, {
         "id": "3",
         "category": "6",
@@ -23,7 +28,9 @@ var list = [
         "title": "Apartment East",
         "description": "<p>Apartment East</p>",
         "longitude": "30.328809",
-        "latitude": "20.483748"
+        "latitude": "20.483748",
+        "status": "confirmed",
+        "address": "Berlin, Germany"
       }, {
         "id": "4",
         "category": "6",
@@ -31,7 +38,9 @@ var list = [
         "title": "Apartment West",
         "description": "<p>Apartment West</p>",
         "longitude": "-40.329732",
-        "latitude": "39.483429"
+        "latitude": "39.483429",
+        "status": "confirmed",
+        "address": "Oslo, Norway"
       }, {
         "id": "5",
         "category": "6",
@@ -39,7 +48,9 @@ var list = [
         "title": "Baur-Sames-Bogart (BSB) Hall",
         "description": "<p>Baur-Sames-Bogart Hall</p>",
         "longitude": "-60.325714",
-        "latitude": "39.482382"
+        "latitude": "39.482382",
+        "status": "ongoing",
+        "address": "Moscow, Russia"
       }];
 
 //Creates a google maps api script
@@ -60,46 +71,48 @@ function initMap(){
     geocoder = new google.maps.Geocoder();
     map = new google.maps.Map(document.getElementById('map'), defMapCenter);
 
-    let infoWindow = new google.maps.InfoWindow({
-        content: `  <h3>${this.lat}</h3><br>
-                    <h3>${this.lat}</h3><br>
-                    <h3>${this.lat}</h3><br>
-                    <h3>${this.lat}</h3>`            
-    });
-
-    codeAddress("Belgrade, Serbia");
+    // let infoWindow = new google.maps.InfoWindow({
+    //     content: `  <h3>${this.lat}</h3><br>
+    //                 <h3>${this.lat}</h3><br>
+    //                 <h3>${this.lat}</h3><br>
+    //                 <h3>${this.lat}</h3>`            
+    // });
 
     function codeAddress(address) {
-    geocoder.geocode({ 'address': address }, function(results, status) {
-        if (status === google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
+        geocoder.geocode({ 'address': address }, function(results, status) {
+            if (status === google.maps.GeocoderStatus.OK) {
+                map.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: map,
+                    position: results[0].geometry.location
+                });
+            } else {
+                alert("Geocode unsuccessful");
+                }
         });
-        } else {
-        alert("Geocode unsuccessful");
-        }
-    });
-}
+    }
 
     
     //CREATE MARKERS from list
     for (let i = 0; i < list.length; i++) {
 
         var marker = new google.maps.Marker({
-            position: new google.maps.LatLng(list[i].latitude, list[i].longitude),
+            //position: new google.maps.LatLng(list[i].latitude, list[i].longitude),
+            position: codeAddress(list[i].address),
             title: list[i].title,
             map: map
         });
+
+
         gmarkers.push(marker);
         google.maps.event.addListener(marker, 'click', ( function(marker, i) {
             return () => {
-                if (list[i].description !== "" || list[i].title !== "") {
-                    infoWindow.setContent('<div class="content" id="content-' + list[i].id +
-                    '" style="max-height:300px; font-size:12px;"><h3>' + list[i].title + '</h3>' +
-                    '<hr class="grey" />' +
-                    list[i].description) + '</div>';
+                if (list[i].title !== "") {
+                    infoWindow.setContent(` <h3>${list[i].title}</h3><br>
+                                            <h3>${list[i].address}</h3><br>
+                                            <h3>${list[i].status}</h3><br>
+                                            <h3>${list[i].description}</h3>`),
+
                     infoWindow.open(map, marker);
                 }
             }
