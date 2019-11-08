@@ -71,13 +71,6 @@ function initMap(){
     geocoder = new google.maps.Geocoder();
     map = new google.maps.Map(document.getElementById('map'), defMapCenter);
 
-    // let infoWindow = new google.maps.InfoWindow({
-    //     content: `  <h3>${this.lat}</h3><br>
-    //                 <h3>${this.lat}</h3><br>
-    //                 <h3>${this.lat}</h3><br>
-    //                 <h3>${this.lat}</h3>`            
-    // });
-
     function codeAddress(address) {
         geocoder.geocode({ 'address': address }, function(results, status) {
             if (status === google.maps.GeocoderStatus.OK) {
@@ -96,13 +89,18 @@ function initMap(){
     //CREATE MARKERS from list
     for (let i = 0; i < list.length; i++) {
 
-        var marker = new google.maps.Marker({
+        let marker = new google.maps.Marker({
             //position: new google.maps.LatLng(list[i].latitude, list[i].longitude),
             position: codeAddress(list[i].address),
-            title: list[i].title,
             map: map
         });
-
+        
+        // let infoWindow = new google.maps.InfoWindow({
+        //     content: `  <h3>${i}</h3><br>
+        //                 <h3>${i}</h3><br>
+        //                 <h3>${i}</h3><br>
+        //                 <h3>${i}</h3>`            
+        // });
 
         gmarkers.push(marker);
         google.maps.event.addListener(marker, 'click', ( function(marker, i) {
@@ -120,12 +118,13 @@ function initMap(){
     }
 }
 
-let sheetsUrl = 'https://spreadsheets.google.com/feeds/cells/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/1/public/full?alt=json'
-fetch(`${sheetsUrl}`).then( response => {
-    return response.json();
-}).then( data => { 
-    console.log(data);
-});
+// GOOGLE SHEET
+// let sheetsUrl = 'https://spreadsheets.google.com/feeds/cells/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/1/public/full?alt=json'
+// fetch(`${sheetsUrl}`).then( response => {
+//     return response.json();
+// }).then( data => { 
+//     console.log(data);
+// });
 
 
 // fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=${API_KEY}`).then( response => {
