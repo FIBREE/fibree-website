@@ -108,6 +108,8 @@ function initMap(){
                     <h3>${this.lat}</h3>`            
     });
 
+
+    //CREATE MARKERS
     for (let i = 0; i < list.length; i++) {
 
         var marker = new google.maps.Marker({
@@ -131,6 +133,14 @@ function initMap(){
 
 }
 
+let sheetsUrl = 'https://docs.google.com/spreadsheets/d/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/edit#gid=1405687631/1/public/basic?alt=json'
+fetch(`${sheetsUrl}`).then( response => {
+    return response.json();
+}).then( data => { 
+    console.log(data);
+});
+
+
 
 
 
@@ -139,14 +149,7 @@ function initMap(){
 //     }).then( data => { 
 //         console.log(data);
 //     });
-
-
-// fetch().then( response => {
-//         return response.json();
-//     }).then( data => { 
-//         console.log(data);
-//     });
-
+// https://spreadsheets.google.com/feeds/cells/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/1/public/full?alt=json 
 
 //geo
 // https://gist.github.com/brittanystoroz/5573406
