@@ -68,6 +68,7 @@ function initMap(){
         center: { lat: 25, lng: 0 },
         zoom: 3
     }
+
     geocoder = new google.maps.Geocoder();
     map = new google.maps.Map(document.getElementById('map'), defMapCenter);
 
@@ -80,15 +81,13 @@ function initMap(){
                     position: results[0].geometry.location
                 });
             } else {
-                alert("Geocode unsuccessful");
-                }
+                console.log("not able to geolocate");
+            }
         });
     }
 
-    
     //CREATE MARKERS from list
     for (let i = 0; i < list.length; i++) {
-
         let marker = new google.maps.Marker({
             //position: new google.maps.LatLng(list[i].latitude, list[i].longitude),
             position: codeAddress(list[i].address),
