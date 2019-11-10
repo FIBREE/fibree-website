@@ -56,7 +56,7 @@ var list = [
 //Creates a google maps api script
 function mapScript(){
     let gmap = document.createElement('script');
-    const API_KEY = "AIzaSyAIXx8S4YwRiV7Q4bLbzbR8J4-exix-gNY";
+    const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
 
     gmap.type = 'text/javascript';
     gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&signed_in=true&key=${API_KEY}&language=en`;
