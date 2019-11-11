@@ -59,7 +59,7 @@ function mapScript(){
     const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
 
     gmap.type = 'text/javascript';
-    gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&signed_in=true&key=${API_KEY}&language=en`;
+    gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&key=${API_KEY}&language=en`;
     document.body.appendChild(gmap);
 }
 
@@ -135,3 +135,4 @@ function initMap(){
 
 //geo
 // https://gist.github.com/brittanystoroz/5573406
+// https://sheets.googleapis.com/v4/spreadsheets/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true
