@@ -110,7 +110,6 @@ function initMap(){
 
         getGeoPromise.then( () => {
             google.maps.event.addListener(marker, 'click', ( function(marker, i) {
-
                 return () => {
                     infoWindow.setContent(` <h3>${list[i].title}</h3><br>
                                         <h3>${list[i].address}</h3><br>
