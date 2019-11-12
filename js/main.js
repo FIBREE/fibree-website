@@ -71,36 +71,30 @@ function initMap(){
         center: { lat: 50, lng: 25 },
         zoom: 3
     }
-    geocoder = new google.maps.Geocoder();
-    map = new google.maps.Map(document.getElementById('map'), defMapCenter);
 
+    let geocoder = new google.maps.Geocoder();
+    let map = new google.maps.Map(document.getElementById('map'), defMapCenter);
+
+    //close prev window
+    let infoWindow = new google.maps.InfoWindow({
+        maxWidth: 300,
+        infoBoxClearance: new google.maps.Size(1, 1),
+        disableAutoPan: false
+    });
     
     //CREATE MARKERS from list
     for (let i = 0; i < list.length; i++) {
         let marker = new google.maps.Marker();
 
-        let infoWindow = new google.maps.InfoWindow({
-            maxWidth: 300,
-            infoBoxClearance: new google.maps.Size(1, 1),
-            disableAutoPan: false
-        });
-
         let getGeoPromise = new Promise( function(resolve, reject){
-            let success = false;
-
             geocoder.geocode({ 'address': list[i].address }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
-                    console.log("set address called");
+                    console.log("set address called"); //DELETE
                     marker = new google.maps.Marker({
                         map: map,
                         position: results[0].geometry.location
                     });
-                    success = true;
-                } else {
-                    console.log("not able to geolocate");
-                }
-            
-                if(success){
+                    gmarkers.push(marker);
                     resolve();
                 } else {
                     reject(status);
@@ -111,15 +105,17 @@ function initMap(){
         getGeoPromise.then( () => {
             google.maps.event.addListener(marker, 'click', ( function(marker, i) {
                 return () => {
+                    console.log("marker clicked");
+
                     infoWindow.setContent(` <h3>${list[i].title}</h3><br>
-                                        <h3>${list[i].address}</h3><br>
-                                        <h3>${list[i].status}</h3><br>
-                                        <h3>${list[i].description}</h3>`);
-    
+                                            <h3>${list[i].address}</h3><br>
+                                            <h3>${list[i].status}</h3><br>
+                                            <h3>${list[i].description}</h3>`);
+                                            
                     infoWindow.open(map, marker);
                 }
             })(marker, i));
-        }).catch( (fromReject)=>{
+        }).catch( (fromReject) => {
             console.log("Geocoder failed, status:" + fromReject);
         });
 
