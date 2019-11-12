@@ -1,4 +1,7 @@
+mapScript();
+
 var gmarkers = [];
+
 //dummy data for testing
 var list = [
     {
@@ -65,57 +68,55 @@ function mapScript(){
 
 function initMap(){
     let defMapCenter = {
-        center: { lat: 25, lng: 0 },
+        center: { lat: 50, lng: 25 },
         zoom: 3
     }
-
     geocoder = new google.maps.Geocoder();
     map = new google.maps.Map(document.getElementById('map'), defMapCenter);
 
-    function codeAddress(address) {
-        geocoder.geocode({ 'address': address }, function(results, status) {
-            if (status === google.maps.GeocoderStatus.OK) {
-                map.setCenter(results[0].geometry.location);
-                var marker = new google.maps.Marker({
-                    map: map,
-                    position: results[0].geometry.location
-                });
-            } else {
-                console.log("not able to geolocate");
-            }
-        });
-    }
-
+    
     //CREATE MARKERS from list
     for (let i = 0; i < list.length; i++) {
-        let marker = new google.maps.Marker({
-            //position: new google.maps.LatLng(list[i].latitude, list[i].longitude),
-            position: codeAddress(list[i].address),
-            map: map
-        });
+        let marker = new google.maps.Marker();
+
         
-        // let infoWindow = new google.maps.InfoWindow({
-        //     content: `  <h3>${i}</h3><br>
-        //                 <h3>${i}</h3><br>
-        //                 <h3>${i}</h3><br>
-        //                 <h3>${i}</h3>`            
-        // });
+        let getGeoPromise = new Promise( function(resolve, reject){
+            geocoder.geocode({ 'address': list[i].address }, function(results, status) {
+                if (status === google.maps.GeocoderStatus.OK) {
 
-        gmarkers.push(marker);
-        google.maps.event.addListener(marker, 'click', ( function(marker, i) {
-            return () => {
-                if (list[i].title !== "") {
-                    infoWindow.setContent(` <h3>${list[i].title}</h3><br>
-                                            <h3>${list[i].address}</h3><br>
-                                            <h3>${list[i].status}</h3><br>
-                                            <h3>${list[i].description}</h3>`),
-
-                    infoWindow.open(map, marker);
+                    console.log("set address called");
+                    marker = new google.maps.Marker({
+                        map: map,
+                        position: results[0].geometry.location
+                    });
+                } else {
+                    console.log("not able to geolocate");
                 }
-            }
-        })(marker, i));
+                resolve();
+            });
+        });
+
+        let infoWindow = new google.maps.InfoWindow({
+            maxWidth: 300,
+            infoBoxClearance: new google.maps.Size(1, 1),
+            disableAutoPan: false
+        });
+
+        getGeoPromise.then( () => {
+            google.maps.event.addListener(marker, 'click', ( function(marker, i) {
+                
+                infoWindow.setContent(` <h3>${list[i].title}</h3><br>
+                                        <h3>${list[i].address}</h3><br>
+                                        <h3>${list[i].status}</h3><br>
+                                        <h3>${list[i].description}</h3>`);
+    
+                infoWindow.open(map, marker);
+            })(marker, i));
+        });
+
     }
 }
+
 
 // GOOGLE SHEET
 // let sheetsUrl = 'https://spreadsheets.google.com/feeds/cells/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/1/public/full?alt=json'
