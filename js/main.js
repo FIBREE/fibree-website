@@ -54,7 +54,7 @@ var list = [
         "latitude": "39.482382",
         "status": "ongoing",
         "address": "Moscow, Russia"
-      }];
+}];
 
 //Creates a google maps api script
 function mapScript(){
@@ -75,9 +75,10 @@ function initMap(){
     let geocoder = new google.maps.Geocoder();
     let map = new google.maps.Map(document.getElementById('map'), defMapCenter);
 
-    //close prev window
+    //STYLE CENTER AND FONT
     let infoWindow = new google.maps.InfoWindow({
-        maxWidth: 300,
+        minWidth: 300,
+        maxWidth: 500,
         infoBoxClearance: new google.maps.Size(1, 1),
         disableAutoPan: false
     });
@@ -86,7 +87,7 @@ function initMap(){
     for (let i = 0; i < list.length; i++) {
         let marker = new google.maps.Marker();
 
-        let getGeoPromise = new Promise( function(resolve, reject){
+        let geoPromise = new Promise( function(resolve, reject){
             geocoder.geocode({ 'address': list[i].address }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
                     console.log("set address called"); //DELETE
@@ -102,11 +103,12 @@ function initMap(){
             });
         });
 
-        getGeoPromise.then( () => {
+        geoPromise.then( () => {
             google.maps.event.addListener(marker, 'click', ( function(marker, i) {
                 return () => {
-                    console.log("marker clicked");
+                    console.log("marker clicked");//DELETE
 
+                    //add image
                     infoWindow.setContent(` <h3>${list[i].title}</h3><br>
                                             <h3>${list[i].address}</h3><br>
                                             <h3>${list[i].status}</h3><br>
