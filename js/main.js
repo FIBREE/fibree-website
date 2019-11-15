@@ -1,70 +1,33 @@
+//Creates a google maps api script
+const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
+const SHEET_ID = '1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4';
 
-// //dummy data for testing
-// var list = [
-//     {
-//         "id": "1",
-//         "category": "6",
-//         "campus_location": "F2",
-//         "title": "Alpha Tau Omega Fraternity",
-//         "description": "<p>Alpha Tau Omega house</p>",
-//         "longitude": "-87.321133",
-//         "latitude": "39.484092",
-//         "status": "ongoing",
-//         "address": "Belgrade, Serbia"
-//       }, {
-//         "id": "2",
-//         "category": "6",
-//         "campus_location": "B2",
-//         "title": "Apartment Commons",
-//         "description": "<p>The commons area of the apartment-style residential complex</p>",
-//         "longitude": "20.329282",
-//         "latitude": "39.483599",
-//         "status": "ongoing",
-//         "address": "Paris, France"
-//       }, {
-//         "id": "3",
-//         "category": "6",
-//         "campus_location": "B2",
-//         "title": "Apartment East",
-//         "description": "<p>Apartment East</p>",
-//         "longitude": "30.328809",
-//         "latitude": "20.483748",
-//         "status": "confirmed",
-//         "address": "Berlin, Germany"
-//       }, {
-//         "id": "4",
-//         "category": "6",
-//         "campus_location": "B2",
-//         "title": "Apartment West",
-//         "description": "<p>Apartment West</p>",
-//         "longitude": "-40.329732",
-//         "latitude": "39.483429",
-//         "status": "confirmed",
-//         "address": "Oslo, Norway"
-//       }, {
-//         "id": "5",
-//         "category": "6",
-//         "campus_location": "C2",
-//         "title": "Baur-Sames-Bogart (BSB) Hall",
-//         "description": "<p>Baur-Sames-Bogart Hall</p>",
-//         "longitude": "-60.325714",
-//         "latitude": "39.482382",
-//         "status": "ongoing",
-//         "address": "Moscow, Russia"
-// }];
+(function importStyle(){
+    let head = document.getElementsByTagName('HEAD')[0];
+    let link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = './css/main.css';
+    head.appendChild(link);
+})();
 
+(function mapScript(){
+    let gmap = document.createElement('script');
+
+    gmap.type = 'text/javascript';
+    gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&key=${API_KEY}&language=en`;
+    document.body.appendChild(gmap);
+})();
 
 let sheetsData;
 let list = [];
 let dataPromise = new Promise( function(resolve, reject){
     let gotData = false;
-    const sheetId = '1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4';
-    let sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true`;
+    let sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/?key=${API_KEY}&includeGridData=true`;
     fetch(`${sheetsUrl}`).then( response => {
         return response.json();
     }).then( data => { 
         sheetsData = data.sheets[1].data[0].rowData;
-
         for(let i = 1, j=0 ; i<sheetsData.length; i++,j++){
             list[j] = {
                 "name":sheetsData[i].values[1].formattedValue,
@@ -76,22 +39,12 @@ let dataPromise = new Promise( function(resolve, reject){
         gotData = true;
     
         if(gotData){
-            resolve(console.log("works"));
+            resolve(console.log("got data"));
         } else {
-            reject();
+            reject(console.log("failed to get data"));
         }
     });
 });
-
-//Creates a google maps api script
-(function mapScript(){
-    let gmap = document.createElement('script');
-    const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
-
-    gmap.type = 'text/javascript';
-    gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&key=${API_KEY}&language=en`;
-    document.body.appendChild(gmap);
-})();
 
 function initMap(){
     let defMapCenter = {
@@ -110,12 +63,13 @@ function initMap(){
         disableAutoPan: false
     });
     
-    dataPromise.then( ()=>{
-        let interval = setInterval( ()=>{
+    let interval = setInterval(()=>{
+        dataPromise.then( ()=>{
             for (let i = 0; i < list.length; i++) {
                 let marker = new google.maps.Marker();
     
                 let geoPromise = new Promise( function(resolve, reject){
+                    
                     geocoder.geocode({ 'address': list[i].address }, function(results, status) {
                         if (status === google.maps.GeocoderStatus.OK) {
                             let icon = '';
@@ -132,38 +86,39 @@ function initMap(){
                                 }
                             }
     
-                            console.log("set address called"); //DELETE
                             marker = new google.maps.Marker({
                                 position: results[0].geometry.location,
                                 map: map,
                                 icon: icon,
                             });
+                            console.log("set address called"); //DELETE
                             resolve();
                         } else {
-                            reject(status);
+                            reject("Geocoder failed, status:" + status);
                         }
                     });
                 });
-    
+                
                 geoPromise.then(() => {
+                    console.log("marker created for :" + i);//DELETE
                     google.maps.event.addListener(marker, 'click', ( function(marker, i) {
                         return () => {
                             console.log("marker clicked");//DELETE
-    
-                            //add image
+                            
                             infoWindow.setContent(` <h3>${list[i].name}</h3><br>
                                                     <h3>${list[i].address}</h3><br>
-                                                    <h3>${list[i].link}</h3>`);
+                                                    <a href=${list[i].link} class="infoBox" target="_blank"><h3>LinkedIn</h3></a> `);
                                                     
                             infoWindow.open(map, marker);
                         }
                     })(marker, i));
                 }).catch( (fromReject) => {
-                    console.log("Geocoder failed, status:" + fromReject);
+                    console.log("geoPromise : "+ fromReject);
                 });
+    
             }
-        }, 1000);
-        setTimeout(clearInterval(interval),2000);
+        });
+        setTimeout(clearInterval(interval),5000);
     });
 }
 
