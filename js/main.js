@@ -1,7 +1,5 @@
 mapScript();
 
-var gmarkers = [];
-
 //dummy data for testing
 var list = [
     {
@@ -90,12 +88,27 @@ function initMap(){
         let geoPromise = new Promise( function(resolve, reject){
             geocoder.geocode({ 'address': list[i].address }, function(results, status) {
                 if (status === google.maps.GeocoderStatus.OK) {
+                    let icon = '';
+                    
+                    if(list[i].status == 'confirmed'){
+                        icon = {
+                            url: './images/logo.png',
+                            scaledSize: new google.maps.Size(30, 30)
+                        }
+                    }else{
+                        icon = {
+                            url: './images/glogo.png',
+                            scaledSize: new google.maps.Size(30, 30),
+                            opacity: 0.5
+                        }
+                    }
+
                     console.log("set address called"); //DELETE
                     marker = new google.maps.Marker({
+                        position: results[0].geometry.location,
                         map: map,
-                        position: results[0].geometry.location
+                        icon: icon,
                     });
-                    gmarkers.push(marker);
                     resolve();
                 } else {
                     reject(status);
@@ -109,10 +122,9 @@ function initMap(){
                     console.log("marker clicked");//DELETE
 
                     //add image
-                    infoWindow.setContent(` <h3>${list[i].title}</h3><br>
+                    infoWindow.setContent(` <h3>${list[i].name}</h3><br>
                                             <h3>${list[i].address}</h3><br>
-                                            <h3>${list[i].status}</h3><br>
-                                            <h3>${list[i].description}</h3>`);
+                                            <h3>${list[i].link}</h3>`);
                                             
                     infoWindow.open(map, marker);
                 }
@@ -120,7 +132,6 @@ function initMap(){
         }).catch( (fromReject) => {
             console.log("Geocoder failed, status:" + fromReject);
         });
-
     }
 }
 
@@ -141,6 +152,9 @@ function initMap(){
 //     });
 // https://spreadsheets.google.com/feeds/cells/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/1/public/full?alt=json 
 
-//geo
-// https://gist.github.com/brittanystoroz/5573406
+
 // https://sheets.googleapis.com/v4/spreadsheets/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true
+
+
+
+// 166845639-1bt68rr1s5lab4ilgbpqn0uql9468vts.apps.googleusercontent.com 
