@@ -98,8 +98,7 @@ function initMap(){
                     }else{
                         icon = {
                             url: './images/glogo.png',
-                            scaledSize: new google.maps.Size(30, 30),
-                            opacity: 0.5
+                            scaledSize: new google.maps.Size(30, 30)
                         }
                     }
 
@@ -116,7 +115,7 @@ function initMap(){
             });
         });
 
-        geoPromise.then( () => {
+        geoPromise.then(() => {
             google.maps.event.addListener(marker, 'click', ( function(marker, i) {
                 return () => {
                     console.log("marker clicked");//DELETE
@@ -135,26 +134,15 @@ function initMap(){
     }
 }
 
+let sheetsData;
+let sheetsUrl = 'https://sheets.googleapis.com/v4/spreadsheets/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true'
+fetch(`${sheetsUrl}`).then( response => {
+    return response.json();
+}).then( data => { 
+    sheetsData = data.sheets[1].data[0].rowData;
+});
 
-// GOOGLE SHEET
-// let sheetsUrl = 'https://spreadsheets.google.com/feeds/cells/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/1/public/full?alt=json'
-// fetch(`${sheetsUrl}`).then( response => {
-//     return response.json();
-// }).then( data => { 
-//     console.log(data);
-// });
 
-
-// fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=1600+Amphitheatre+Parkway,+Mountain+View,+CA&key=${API_KEY}`).then( response => {
-//         return response.json();
-//     }).then( data => { 
-//         console.log(data);
-//     });
-// https://spreadsheets.google.com/feeds/cells/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/1/public/full?alt=json 
 
 
 // https://sheets.googleapis.com/v4/spreadsheets/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true
-
-
-
-// 166845639-1bt68rr1s5lab4ilgbpqn0uql9468vts.apps.googleusercontent.com 
