@@ -1,4 +1,3 @@
-mapScript();
 
 //dummy data for testing
 var list = [
@@ -54,15 +53,37 @@ var list = [
         "address": "Moscow, Russia"
 }];
 
+
+let sheetsData;
+let parsedData = [];
+
+const sheetId = '1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4';
+let sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true`;
+fetch(`${sheetsUrl}`).then( response => {
+    return response.json();
+}).then( data => { 
+    sheetsData = data.sheets[1].data[0].rowData;
+
+    for(let i = 1, j=0 ; i<sheetsData.length; i++,j++){
+        parsedData[j] = {
+            "name":sheetsData[i].values[1].formattedValue,
+            "status":sheetsData[i].values[2].formattedValue,
+            "address": sheetsData[i].values[4].formattedValue +","+sheetsData[i].values[5].formattedValue,
+            "link": sheetsData[i].values[6].formattedValue
+        }
+    }
+    console.log(parsedData);
+});
+
 //Creates a google maps api script
-function mapScript(){
+(function mapScript(){
     let gmap = document.createElement('script');
     const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
 
     gmap.type = 'text/javascript';
     gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&key=${API_KEY}&language=en`;
     document.body.appendChild(gmap);
-}
+})();
 
 function initMap(){
     let defMapCenter = {
@@ -134,15 +155,33 @@ function initMap(){
     }
 }
 
-let sheetsData;
-let sheetsUrl = 'https://sheets.googleapis.com/v4/spreadsheets/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true'
-fetch(`${sheetsUrl}`).then( response => {
-    return response.json();
-}).then( data => { 
-    sheetsData = data.sheets[1].data[0].rowData;
-});
 
 
 
 
 // https://sheets.googleapis.com/v4/spreadsheets/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true
+// let dataPromise = new Promise( function(resolve, reject){
+//     let gotData = false;
+//     const sheetId = '1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4';
+//     let sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${sheetId}/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true`;
+//     fetch(`${sheetsUrl}`).then( response => {
+//         return response.json();
+//     }).then( data => { 
+//         sheetsData = data.sheets[1].data[0].rowData;
+
+//         for(let i = 1, j=0 ; i<sheetsData.length; i++,j++){
+//             list[j] = {
+//                 "name":sheetsData[i].values[1].formattedValue,
+//                 "status":sheetsData[i].values[2].formattedValue,
+//                 "address": sheetsData[i].values[4].formattedValue +","+sheetsData[i].values[5].formattedValue,
+//                 "link": sheetsData[i].values[6].formattedValue
+//             }
+//         }
+//         gotData = true;
+//     });
+//     if(gotData){
+//         resolve();
+//     } else {
+//         reject();
+//     }
+// });
