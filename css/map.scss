@@ -1,0 +1,24 @@
+#map {
+    height: 100vh;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.infoBox{
+    text-decoration: none;
+    color: rgb(38, 129, 99);
+    transition: all .1s ease-in-out;
+
+    &:hover{
+        transition: all .1s ease-in-out;
+        color: #3CC194;
+    }
+}
+
+.gm-style .gm-style-iw {
+    text-align: center;
+}    
