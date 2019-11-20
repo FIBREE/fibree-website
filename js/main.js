@@ -7,7 +7,7 @@ const SHEET_ID = '1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4';
     let link = document.createElement('link');
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = './css/main.css';
+    link.href = './css/map.css'
     head.appendChild(link);
 })();
 
@@ -65,18 +65,19 @@ function initMap(){
     
     setTimeout(()=>{
         
+        
         for (let i = 0; i < list.length; i++) {
+            
+
             let marker = new google.maps.Marker();
 
             let geoPromise = new Promise( function(resolve, reject){
                 
                 geocoder.geocode({ 'address': list[i].address }, function(results, status) {
-                    if(status === "OVER_QUERY_LIMIT"){
-                        i--;
-                        console.log(i);
-                    }
                     if (status === google.maps.GeocoderStatus.OK) {
-                    
+                        
+                        console.log(list[i].address + " " + results[0].geometry.location.lat() + " " + results[0].geometry.location.lng());
+                        
 
                         let icon = '';
                         
@@ -125,10 +126,3 @@ function initMap(){
         
     },1000);
 }
-
-
-
-
-
-// https://sheets.googleapis.com/v4/spreadsheets/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/?key=AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0&includeGridData=true
-
