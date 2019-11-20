@@ -24,25 +24,28 @@ let list = [];
 
 let gotData = false;
 let sheetsUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/?key=${API_KEY}&includeGridData=true`;
-fetch(`${sheetsUrl}`).then( response => {
-    return response.json();
-}).then( data => { 
-    sheetsData = data.sheets[1].data[0].rowData;
-    for(let i = 1, j=0 ; i<sheetsData.length; i++,j++){
-        list[j] = {
-            "name":sheetsData[i].values[1].formattedValue,
-            "status":sheetsData[i].values[2].formattedValue,
-            "address": sheetsData[i].values[4].formattedValue +","+sheetsData[i].values[5].formattedValue,
-            "link": sheetsData[i].values[6].formattedValue
-        }
-    }
-    gotData = true;
 
-    if(gotData){
-        console.log("got data");
-    } else {
-        console.log("failed to get data");
-    }
+let dataPromise = new Promise( function(resolve, reject){
+    fetch(`${sheetsUrl}`).then( response => {
+        return response.json();
+    }).then( data => { 
+        sheetsData = data.sheets[1].data[0].rowData;
+        for(let i = 1, j=0 ; i<sheetsData.length; i++,j++){
+            list[j] = {
+                "name":sheetsData[i].values[1].formattedValue,
+                "status":sheetsData[i].values[2].formattedValue,
+                "address": sheetsData[i].values[4].formattedValue +","+sheetsData[i].values[5].formattedValue,
+                "link": sheetsData[i].values[6].formattedValue
+            }
+        }
+        gotData = true;
+    
+        if(gotData){
+            resolve();
+        } else {
+            reject();
+        }
+    });
 });
 
 
@@ -63,13 +66,15 @@ function initMap(){
         disableAutoPan: false
     });
     
-    setTimeout(()=>{
+    
         
         
+    dataPromise.then( ()=>{
         for (let i = 0; i < list.length; i++) {
-            
-
+        
+        setTimeout( function(){
             let marker = new google.maps.Marker();
+            //console.log("called");
 
             let geoPromise = new Promise( function(resolve, reject){
                 
@@ -78,7 +83,7 @@ function initMap(){
                         
                         console.log(list[i].address + " " + results[0].geometry.location.lat() + " " + results[0].geometry.location.lng());
                         
-
+    
                         let icon = '';
                         
                         if(list[i].status == 'confirmed'){
@@ -92,13 +97,13 @@ function initMap(){
                                 scaledSize: new google.maps.Size(30, 30)
                             }
                         }
-
+    
                         marker = new google.maps.Marker({
                             position: results[0].geometry.location,
                             map: map,
                             icon: icon,
                         });
-                        console.log("geocoder called"); //DELETE
+                        //console.log("geocoder called"); //DELETE
                         resolve();
                     } else {
                         reject("Geocoder failed, status:" + status);
@@ -107,10 +112,10 @@ function initMap(){
             });
             
             geoPromise.then(() => {
-                console.log("marker created for :" + i);//DELETE
+                //console.log("marker created for :" + i);//DELETE
                 google.maps.event.addListener(marker, 'click', ( function(marker, i) {
                     return () => {
-                        console.log("marker clicked");//DELETE
+                        //console.log("marker clicked");//DELETE
                         
                         infoWindow.setContent(` <h3>${list[i].name}</h3><br>
                                                 <h3>${list[i].address}</h3><br>
@@ -122,7 +127,12 @@ function initMap(){
             }).catch( (fromReject) => {
                 console.log("geoPromise : "+ fromReject);
             });
-        }
         
-    },1000);
+        },1000*i);
+    }
+        
+    });
+    
+    
+    
 }
