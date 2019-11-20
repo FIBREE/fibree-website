@@ -35,7 +35,9 @@ let dataPromise = new Promise( function(resolve, reject){
                 "name":sheetsData[i].values[1].formattedValue,
                 "status":sheetsData[i].values[2].formattedValue,
                 "address": sheetsData[i].values[4].formattedValue +","+sheetsData[i].values[5].formattedValue,
-                "link": sheetsData[i].values[6].formattedValue
+                "link": sheetsData[i].values[6].formattedValue,
+                "lat": sheetsData[i].values[18].formattedValue,
+                "lng": sheetsData[i].values[19].formattedValue
             }
         }
         gotData = true;
@@ -55,84 +57,49 @@ function initMap(){
         zoom: 3
     }
 
-    let geocoder = new google.maps.Geocoder();
     let map = new google.maps.Map(document.getElementById('map'), defMapCenter);
 
-    //STYLE CENTER AND FONT
     let infoWindow = new google.maps.InfoWindow({
         minWidth: 300,
         maxWidth: 500,
         infoBoxClearance: new google.maps.Size(1, 1),
         disableAutoPan: false
     });
-    
-    
         
-        
+    let marker = new google.maps.Marker();
+
     dataPromise.then( ()=>{
         for (let i = 0; i < list.length; i++) {
-        
-        setTimeout( function(){
-            let marker = new google.maps.Marker();
-            //console.log("called");
 
-            let geoPromise = new Promise( function(resolve, reject){
-                
-                geocoder.geocode({ 'address': list[i].address }, function(results, status) {
-                    if (status === google.maps.GeocoderStatus.OK) {
-                        
-                        console.log(list[i].address + " " + results[0].geometry.location.lat() + " " + results[0].geometry.location.lng());
-                        
-    
-                        let icon = '';
-                        
-                        if(list[i].status == 'confirmed'){
-                            icon = {
-                                url: './images/logo.png',
-                                scaledSize: new google.maps.Size(30, 30)
-                            }
-                        }else{
-                            icon = {
-                                url: './images/glogo.png',
-                                scaledSize: new google.maps.Size(30, 30)
-                            }
-                        }
-    
-                        marker = new google.maps.Marker({
-                            position: results[0].geometry.location,
-                            map: map,
-                            icon: icon,
-                        });
-                        //console.log("geocoder called"); //DELETE
-                        resolve();
-                    } else {
-                        reject("Geocoder failed, status:" + status);
-                    }
-                });
-            });
+            let icon = '';
             
-            geoPromise.then(() => {
-                //console.log("marker created for :" + i);//DELETE
-                google.maps.event.addListener(marker, 'click', ( function(marker, i) {
-                    return () => {
-                        //console.log("marker clicked");//DELETE
-                        
-                        infoWindow.setContent(` <h3>${list[i].name}</h3><br>
-                                                <h3>${list[i].address}</h3><br>
-                                                <a href=${list[i].link} class="infoBox" target="_blank"><h3>LinkedIn</h3></a> `);
-                                                
-                        infoWindow.open(map, marker);
-                    }
-                })(marker, i));
-            }).catch( (fromReject) => {
-                console.log("geoPromise : "+ fromReject);
+            if(list[i].status == 'confirmed'){
+                icon = {
+                    url: './images/logo.png',
+                    scaledSize: new google.maps.Size(30, 30)
+                }
+            }else{
+                icon = {
+                    url: './images/glogo.png',
+                    scaledSize: new google.maps.Size(30, 30)
+                }
+            }
+
+            marker = new google.maps.Marker({
+                position: new google.maps.LatLng(list[i].lat , list[i].lng),
+                map: map,
+                icon: icon,
             });
-        
-        },1000*i);
-    }
-        
+
+            google.maps.event.addListener(marker, 'click', ( function(marker, i) {
+                return () => { 
+                    infoWindow.setContent(` <h3>${list[i].name}</h3><br>
+                                            <h3>${list[i].address}</h3><br>
+                                            <a href=${list[i].link} class="infoBox" target="_blank"><h3>LinkedIn</h3></a> `);
+                                            
+                    infoWindow.open(map, marker);
+                }
+            })(marker, i));
+        }
     });
-    
-    
-    
 }
