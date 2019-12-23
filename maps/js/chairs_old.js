@@ -1,6 +1,8 @@
 //Creates a google maps api script
 const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
 const SHEET_ID = '1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4';
+// https://docs.google.com/spreadsheets/d/1tLuovMCa6C0jQLlTDP3ju3AOtbUSLxD8TBU2n_G5ye4/edit#gid=0
+// new sheet key: fibree.org gmail
 
 (function importStyle(){
     let head = document.getElementsByTagName('HEAD')[0];

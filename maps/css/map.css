@@ -1,27 +1,42 @@
 #map {
-  height: 100vh;
+    height: 100vh;
 }
 
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
+html,
+body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
 }
 
-.infoBox {
-  text-decoration: none;
-  color: #268163;
-  -webkit-transition: all .1s ease-in-out;
-  transition: all .1s ease-in-out;
+.href {
+    color: #268163;
+    -webkit-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    text-decoration: none;
 }
 
-.infoBox:hover {
-  -webkit-transition: all .1s ease-in-out;
-  transition: all .1s ease-in-out;
-  color: #3CC194;
+.href:hover {
+    -webkit-transition: all 0.1s ease-in-out;
+    transition: all 0.1s ease-in-out;
+    color: #3cc194;
+    text-decoration: none;
+}
+
+.href a:link {
+    color: #268163;
+    text-decoration: none;
+}
+
+.href a:visited {
+    color: #268163;
+    text-decoration: none;
+}
+
+a, a:active, a:focus {
+    outline: none;
 }
 
 .gm-style .gm-style-iw {
-  text-align: center;
+    text-align: center;
 }
-/*# sourceMappingURL=map.css.map */
