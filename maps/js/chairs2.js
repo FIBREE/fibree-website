@@ -63,15 +63,26 @@ function initMap() {
     dataPromise.then(() => {
         for (let i = 1; i < list.length; i++) {
             let icon = '';
-            if (list[i].meetupUrl !== "") {
+            let SIZE=35;
+            if (list[i].meetupUrl !== "" && list[i].link !== "") {
                 icon = {
-                    url: './images/logo_meetup.png',
-                    scaledSize: new google.maps.Size(35, 35)
+                    url: './images/logo_li_meetup.png',
+                    scaledSize: new google.maps.Size(SIZE, SIZE)
                 };
+            } else if (list[i].meetupUrl !== "" && list[i].link == "") {
+                        icon = {
+                            url: './images/logo_meetup.png',
+                            scaledSize: new google.maps.Size(SIZE, SIZE)
+                        };        
+            } else if (list[i].meetupUrl == "" && list[i].link !== "") {
+                icon = {
+                    url: './images/logo_li.png',
+                    scaledSize: new google.maps.Size(SIZE, SIZE)
+                };        
             } else {
                 icon = {
                     url: './images/logo_nomeetup.png',
-                    scaledSize: new google.maps.Size(35, 35)
+                    scaledSize: new google.maps.Size(SIZE, SIZE)
                 };
             }
 
