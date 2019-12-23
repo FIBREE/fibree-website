@@ -107,13 +107,13 @@ function initMap() {
                     }
 
                     return () => {
-                    	let content="<h3>${list[i].name}</h3>"+
-                            		"<h3>${list[i].address}</h3>" ;
+                    	let content=`<h3>${list[i].name}</h3>
+                            		<h3>${list[i].address}</h3>` ;
                     	if (linkedIn != "#") {
-                    		content+='<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>';
+                    		content+=`<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>`;
                     	}
                     	if (meetup != "#") {
-                    		content+='<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>';
+                    		content+=`<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>`;
                     	}
                             				
                         
