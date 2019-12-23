@@ -121,10 +121,13 @@ function initMap() {
                     	let content=`<h3>${list[i].name}</h3>
                             		<h3>${list[i].address}</h3>` ;
                     	if (linkedIn != "#") {
-                    		content+=`<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>`;
+                            //content+=`<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>`;
+                            content+=`<a href=${linkedIn} class="href" target="${targetLink}"><img src="images/li.png"/></a>`;
+                            
                     	}
                     	if (meetup != "#") {
-                    		content+=`<a href=${meetup} class="href" target="${targetMeet}"><h3>Meetup</h3></a>`;
+                            //content+=`<a href=${meetup} class="href" target="${targetMeet}"><h3>Meetup</h3></a>`;
+                            content+=`<a href=${meetup} class="href" target="${targetMeet}"><img src="images/meetup.png"/></a>`;
                     	}
                             				
                         
