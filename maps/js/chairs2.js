@@ -122,12 +122,12 @@ function initMap() {
                             		<h3>${list[i].address}</h3>` ;
                     	if (linkedIn != "#") {
                             //content+=`<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>`;
-                            content+=`<a href=${linkedIn} class="href" target="${targetLink}"><img width="50" height="50" src="images/li.png"/></a>`;
+                            content+=`<a href=${linkedIn} class="href" target="${targetLink}"><img width="80" height="80" src="images/li.png"/></a>`;
                             
                     	}
                     	if (meetup != "#") {
                             //content+=`<a href=${meetup} class="href" target="${targetMeet}"><h3>Meetup</h3></a>`;
-                            content+=`<a href=${meetup} class="href" target="${targetMeet}"><img width="50" height="50" src="images/meetup.png"/></a>`;
+                            content+=`<a href=${meetup} class="href" target="${targetMeet}"><img width="80" height="80" src="images/meetup.png"/></a>`;
                     	}
                             				
                         
