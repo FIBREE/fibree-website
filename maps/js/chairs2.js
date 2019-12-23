@@ -113,7 +113,7 @@ function initMap() {
                     		content+=`<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>`;
                     	}
                     	if (meetup != "#") {
-                    		content+=`<a href=${linkedIn} class="href" target="${targetLink}"><h3>LinkedIn</h3></a>`;
+                    		content+=`<a href=${meetup} class="href" target="${targetMeet}"><h3>Meetup</h3></a>`;
                     	}
                             				
                         
