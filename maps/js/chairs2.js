@@ -30,10 +30,10 @@ let dataPromise = new Promise(function (resolve, reject) {
             list.push({
                 name: row.data[1],
                 meetupUrl: row.data[7],
-                address: row.data[3] + ',' + row.data[4],
+                address: row.data[3] + ', ' + row.data[4],
                 link: row.data[5],
-                lat: row.data[8].split(',')[0],
-                lng: row.data[8].split(',')[1]
+                lat: row.data[8].split(', ')[0],
+                lng: row.data[8].split(', ')[1]
             });
         },
         complete: function () {
@@ -65,7 +65,7 @@ function initMap() {
             let icon = '';
             if (list[i].meetupUrl !== "") {
                 icon = {
-                    url: './images/logo.png',
+                    url: './images/logo_nomeetup.png',
                     scaledSize: new google.maps.Size(30, 30)
                 };
             } else {
