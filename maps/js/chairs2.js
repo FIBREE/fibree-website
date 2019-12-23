@@ -65,12 +65,12 @@ function initMap() {
             let icon = '';
             if (list[i].meetupUrl !== "") {
                 icon = {
-                    url: './images/logo_nomeetup.png',
+                    url: './images/logo.png',
                     scaledSize: new google.maps.Size(30, 30)
                 };
             } else {
                 icon = {
-                    url: './images/glogo.png',
+                    url: './images/logo_nomeetup.png',
                     scaledSize: new google.maps.Size(30, 30)
                 };
             }
