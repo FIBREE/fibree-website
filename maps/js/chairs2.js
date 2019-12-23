@@ -38,7 +38,7 @@ let dataPromise = new Promise(function (resolve, reject) {
         },
         complete: function () {
             resolve();
-            //console.log(list);
+            console.log(list);
         }
     });
 });
