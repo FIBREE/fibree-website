@@ -1,3 +1,5 @@
+const API_KEY = 'AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0';
+
 (function importStyle() {
     let head = document.getElementsByTagName('HEAD')[0];
     let link = document.createElement('link');
@@ -7,6 +9,13 @@
     head.appendChild(link);
 })();
 
+(function mapScript() {
+    let gmap = document.createElement('script');
+
+    gmap.type = 'text/javascript';
+    gmap.src = `https://maps.googleapis.com/maps/api/js?callback=initMap&key=${API_KEY}&language=en`;
+    document.body.appendChild(gmap);
+})();
 
 let list = [];
 
@@ -29,7 +38,7 @@ let dataPromise = new Promise(function (resolve, reject) {
         },
         complete: function () {
             resolve();
-            console.log(list);
+            //console.log(list);
         }
     });
 });
