@@ -66,12 +66,12 @@ function initMap() {
             if (list[i].meetupUrl !== "") {
                 icon = {
                     url: './images/logo_meetup.png',
-                    scaledSize: new google.maps.Size(60, 60)
+                    scaledSize: new google.maps.Size(35, 35)
                 };
             } else {
                 icon = {
                     url: './images/logo_nomeetup.png',
-                    scaledSize: new google.maps.Size(60, 60)
+                    scaledSize: new google.maps.Size(35, 35)
                 };
             }
 
