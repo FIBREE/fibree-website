@@ -65,7 +65,7 @@ function initMap() {
             let icon = '';
             if (list[i].meetupUrl !== "") {
                 icon = {
-                    url: './images/logo.png',
+                    url: './images/glogo.png',
                     scaledSize: new google.maps.Size(30, 30)
                 };
             } else {
