@@ -4,7 +4,6 @@ const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
 const SIZE = 35;
 
 let list = [];
-let markerList = [];
 
 (function importStyle() {
   let head = document.getElementsByTagName("HEAD")[0];
@@ -70,79 +69,86 @@ function initMap() {
 
   dataPromise
     .then(() => {
-      for (let i = 1; i < list.length - 1; i++) {
+      for (let i = 0; i < list.length - 1; i++) {
         if (list[i].address === list[i + 1].address) {
-          // ++++++++++++ FIX ++++++++++++++++++++++++++++++++++++++++++++++++
-          // set marker icon (based on available links)
-          let content = `<h3>${list[i].address}</h3> <br> <h3>${list[i].name}</h3>`;
+          let content = `<h2>${list[i].address}</h2>`;
           let j = i;
+
+          console.log(list[i].address + " = " + list[j].address);
+          console.log(j);
+
           while (list[i].address === list[j].address) {
             console.log(count);
-            console.log(list[i].address + " = " + list[j].address);
-            count++;
+            content += `<h3>${list[j].name}</h3>`;
 
-            console.log(i, j);
-            content += `<hr><h3>${list[j].name}</h3>`;
+            if (list[j].link === "") {
+              linkedIn = "#";
+              targetLink = "_self";
+            } else {
+              linkedIn = list[j].link;
+              targetLink = "_blank";
+            }
+
+            if (list[j].meetupUrl === "") {
+              meetup = "#";
+              targetMeet = "_self";
+            } else {
+              meetup = list[j].meetupUrl;
+              targetMeet = "_blank";
+            }
+
+            if (linkedIn != "#") {
+              content += `<a href=${linkedIn} class="href" target="${targetLink}"><img width="80" height="80" src="images/li.png"/></a>`;
+            }
+
+            if (meetup != "#") {
+              content += `<a href=${meetup} class="href" target="${targetMeet}"><img width="80" height="80" src="images/meetup.png"/></a>`;
+            }
+            content += `<hr>`;
+
+            if (
+              (list[i].meetupUrl !== "" && list[i].link !== "") ||
+              (list[j].meetupUrl !== "" && list[j].link !== "")
+            ) {
+              icon = {
+                url: "./images/logo_li_meetup.png",
+                scaledSize: new google.maps.Size(SIZE, SIZE)
+              };
+            } else if (list[i].meetupUrl !== "" && list[i].link == "") {
+              icon = {
+                url: "./images/logo_meetup.png",
+                scaledSize: new google.maps.Size(SIZE, SIZE)
+              };
+            } else if (list[i].meetupUrl == "" && list[i].link !== "") {
+              icon = {
+                url: "./images/logo_li.png",
+                scaledSize: new google.maps.Size(SIZE, SIZE)
+              };
+            } else {
+              icon = {
+                url: "./images/logo_nomeetup.png",
+                scaledSize: new google.maps.Size(SIZE, SIZE)
+              };
+            }
+
             j++;
+            count++;
+            if (list[j] === undefined) {
+              count--;
+              break;
+            }
           }
 
-          if (list[i].meetupUrl !== "" && list[i].link !== "") {
-            icon = {
-              url: "./images/logo_li_meetup.png",
-              scaledSize: new google.maps.Size(SIZE, SIZE)
-            };
-          } else if (list[i].meetupUrl !== "" && list[i].link == "") {
-            icon = {
-              url: "./images/logo_meetup.png",
-              scaledSize: new google.maps.Size(SIZE, SIZE)
-            };
-          } else if (list[i].meetupUrl == "" && list[i].link !== "") {
-            icon = {
-              url: "./images/logo_li.png",
-              scaledSize: new google.maps.Size(SIZE, SIZE)
-            };
-          } else {
-            icon = {
-              url: "./images/logo_nomeetup.png",
-              scaledSize: new google.maps.Size(SIZE, SIZE)
-            };
-          }
-
-          // ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
           marker = new google.maps.Marker({
             position: new google.maps.LatLng(list[i].lat, list[i].lng),
             map: map,
             icon: icon
           });
 
-          if (list[i].link === "") {
-            linkedIn = "#";
-            targetLink = "_self";
-          } else {
-            linkedIn = list[i].link;
-            targetLink = "_blank";
-          }
-
-          if (list[i].meetupUrl === "") {
-            meetup = "#";
-            targetMeet = "_self";
-          } else {
-            meetup = list[i].meetupUrl;
-            targetMeet = "_blank";
-          }
-
-          if (linkedIn != "#") {
-            content += `<a href=${linkedIn} class="href" target="${targetLink}"><img width="80" height="80" src="images/li.png"/></a>`;
-          }
-
-          if (meetup != "#") {
-            content += `<a href=${meetup} class="href" target="${targetMeet}"><img width="80" height="80" src="images/meetup.png"/></a>`;
-          }
-
           google.maps.event.addListener(
             marker,
             "click",
-            ((marker, i) => {
+            (marker => {
               return () => {
                 infoWindow.setContent(content);
 
@@ -152,7 +158,7 @@ function initMap() {
                   infoWindow.open(map, marker);
                 }
               };
-            })(marker, i)
+            })(marker)
           );
           i += count;
           count = 0;
@@ -227,11 +233,7 @@ function initMap() {
             })(marker, i)
           );
         }
-
-        markerList.push(marker);
       }
     })
     .catch(error => console.log(error));
 }
-
-console.log(markerList);
