@@ -1,5 +1,5 @@
 const sheetsCsvUrl =
-  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTOb3RR1ZisBeRYH_0g3NR7zq1nUUvmTVKuerT3fKwif-SqbR2OfSY7IXNZaNL0SvbOoKrPFrEuZL-i/pub?gid=2025752931&single=true&callback=googleDocCallback&output=csv";
+  "https://docs.google.com/spreadsheets/d/e/2PACX-1vTOb3RR1ZisBeRYH_0g3NR7zq1nUUvmTVKuerT3fKwif-SqbR2OfSY7IXNZaNL0SvbOoKrPFrEuZL-i/pub?gid=2025752931&single=true&callback=googleDocCallback&output=csv&&sheet=publicData";
 
   const API_KEY = "AIzaSyBTCXWdYTqfIF7OJ8GfyT85saKrV7u0Gm0";
 const SIZE = 35;
